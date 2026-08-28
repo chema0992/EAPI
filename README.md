@@ -1,5 +1,10 @@
 # EAPI: WebAPI in Entry
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![WebGL](https://img.shields.io/badge/WebGL-1.0-red)
+![WASM](https://img.shields.io/badge/WASM-Available-red)
+![Status](https://img.shields.io/badge/Status-In_Development-brightgreen)
+
 블록 코딩은 흔히 다음과 같은 한계를 가진다고 여겨졌습니다.
 
 1. 복잡한 작업에는 부적합하다.
