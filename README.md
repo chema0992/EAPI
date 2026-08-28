@@ -6,8 +6,6 @@
 2. 주로 입문자와 교육용으로 사용된다.
 3. 고성능 작품을 만들기 어렵다.
 
-하지만 [EAPI](https://eapi-web.pages.dev/)는 다릅니다.
-
 하지만 **[EAPI](https://eapi-web.pages.dev/)는 그 경계를 넓히는 것을 목표로 합니다.**
 
 EAPI는 WebGL, WebAssembly(WASM) 등의 기술을 Entry에서 사용할 수 있도록 하며,
