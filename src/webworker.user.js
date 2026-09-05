@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         엔트리 WebWorker 비공식 블록 확장
 // @namespace    http://tampermonkey.net/
-// @version      2.0
+// @version      2.1
 // @description  엔트리에 WebWorker API 기능을 연결하기 위한 확장 유저스크립트
 // @match        *://playentry.org/*
 // @grant        none
@@ -92,6 +92,7 @@
         'worker_list_to_json',
         'worker_fill_result_to_list',
         'worker_is_running',
+        'worker_get_latest_error',
     ];
 
     // 워커 내부 실행 소스코드 프리셋 정의 (추가된 부분)
@@ -222,6 +223,7 @@
                         state.messages[workerName] = {
                             latest: '',
                             raw: null,
+                            lastError: '',
                             hasNew: false
                         };
 
@@ -239,6 +241,9 @@
                         };
 
                         worker.onerror = function(err) {
+                            if (state.messages[workerName]) {
+                                state.messages[workerName].lastError = err.message || '알 수 없는 에러가 발생했습니다.';
+                            }
                             console.error(`[WebWorker Extension] '${workerName}' 오류 발생:`, err.message);
                         };
 
@@ -695,6 +700,33 @@
 
                     return script.callReturn();
                 }
+            );
+
+            // 워커의 최근 오류 메시지 가져오기 (값 블록)
+            addBlock(
+                'worker_get_latest_error',
+                '워커 %1 의 최근 오류 메시지',
+                defaultColor,
+                {
+                    params: [
+                        { type: 'Block', accept: 'string' }
+                    ],
+                    def: [
+                        { type: 'text', params: ['worker_0'] }
+                    ],
+                    map: { WORKER_NAME: 0 }
+                },
+                'text',
+                (sprite, script) => {
+                    const state = targetWindow.__ENTRY_WEBWORKER__;
+                    if (!state || !state.messages) return '';
+
+                    const workerName = script.getStringValue('WORKER_NAME', script);
+                    const msgObj = state.messages[workerName];
+
+                    return msgObj ? (msgObj.lastError || '') : '';
+                },
+                'basic_string_field'
             );
 
             // EntryStatic.getAllBlocks 오버라이딩
